@@ -9,7 +9,7 @@ import plotly
 
 def timeseries_plotter(df):
     
-    ticker = df.paper[500]
+    ticker = df.paper.iloc[0]
     
     trace_high = plotly.graph_objs.Scatter(
         x=df.quote_date,

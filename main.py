@@ -6,7 +6,7 @@ Created on Mon Jul 23 00:02:50 2018
 """
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont, QIcon
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSlot, QCoreApplication
 from predictor import predict
 from data_retriever import ticker_list_retriever
 import sys
@@ -18,6 +18,7 @@ class Example(QWidget):
     
     def __init__(self):
         super().__init__()
+        self.setWindowIcon(QIcon('gui/icongui.png'))
         self.initUI()
 
     def initUI(self):
@@ -89,7 +90,6 @@ class Example(QWidget):
             self.selected_ticker = self.ticker_list[0]['paper']
             
         predict(self.selected_ticker,stratstring)
-        self.textbox.setText("")
     def state_changed(self,*args):
         for arg in args:
             if arg == 1:
@@ -111,8 +111,9 @@ class Example(QWidget):
                 return
             
 
-if __name__ == '__main__':
-    
-    app = QApplication(sys.argv)
+if __name__ == '__main__':    
+    app = QCoreApplication.instance()
+    if app is None:
+        app = QApplication(sys.argv)
     ex = Example()
     sys.exit(app.exec_())

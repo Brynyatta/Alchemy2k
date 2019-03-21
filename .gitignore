@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# html plots
+*.html
+
 # Distribution / packaging
 .Python
 build/

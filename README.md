@@ -2,7 +2,11 @@
 
 A very crude version of a trading aid that predicts stock movement, and lets you simulate using different strategies by backtesting. Still a huge work in progress!
 
+_________________
+LIBRARIES NEEDED:
+talib, PyQt5, pandas, keras, numpy, sklearn, plotly
 
+_________________________________
 Composed of the following modules:
 
 main.py - You want to run this file first, which handles the graphical user interface. 

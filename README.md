@@ -6,21 +6,33 @@ _________________
 LIBRARIES NEEDED:
 talib, PyQt5, pandas, keras, numpy, sklearn, plotly
 
+
+
 _________________________________
-Composed of the following modules:
+Composed of the following packages & modules:
 
-main.py - You want to run this file first, which handles the graphical user interface. 
+__main__.py - You want to run this file first, which handles the graphical user interface. 
 
-data_retriever.py - Downloads ticker list and financial data for the selected stock, from Netfonds. Scrubs the data and ensures that the datapoints of the stock and the index of the exchange have common dates. 
+data package: 
+_____________
+retriever.py - Downloads ticker list and financial data for the selected stock, from Netfonds. Scrubs the data and ensures that the datapoints of the    stock and the index of the exchange have common dates. 
 
-data_extender.py - Derives useful financial metrics from the raw data extracted by data_retriever using the 'talib' Python library. Produces values for RSI, standard deviation, Williams %R and so forth.  
+extender.py - Derives useful financial metrics from the raw data extracted by data_retriever using the 'talib' Python library. Produces values for RSI, standard deviation, Williams %R and so forth.  
 
+predict package: 
+__________
 predictor.py - 3-layer neural network that predicts the next day movement of the stock. Prediction output for stock movement is either -1 (downwards), 0 (sideways) or 1 (upwards). 
 
-account.py - Class to keep track of the cash reserve and stock assets of the hypothetical broker account. 
+account package:
+________________
+broker.py - Class to keep track of the cash reserve and stock assets of the hypothetical broker account. Also acts as the stock exchange, keeps track of completed trades. 
 
-investment_manager.py - Acts as the stock exchange, keeps track of completed trades. 
+strats package:
+_____________
+strategies.py - The behaviour of each trading strategy is written here. Communicates with the account package to conduct trades, and stores the profits/losses in a dataframe. 
 
-account_plotter.py - Plotly tool for showing the evolution of the hypothetical broker account 
+plotter package: 
+_______________
+account.py - Plotly tool for showing the evolution of the hypothetical broker account 
 
-timeseries_plotter.py - Plotly tool for showing the evolution of the underlying stock price 
+timeseries.py - Plotly tool for showing the evolution of the underlying stock price 

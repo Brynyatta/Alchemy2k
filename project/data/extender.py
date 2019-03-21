@@ -2,7 +2,8 @@ import numpy as np
 import pandas as pd
 import talib
 
-def data_extender(df):
+
+def extender(df):
     df['H-L'] = df['high'] - df['low']
     df['O-C'] = df['close'] - df['open']
     df['3day MA'] = df['close'].shift(1).rolling(window = 3).mean()

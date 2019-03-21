@@ -7,7 +7,7 @@ Created on Wed May 30 19:07:14 2018
 import plotly
 
 
-def timeseries_plotter(df):
+def timeseries(df):
     
     ticker = df.paper.iloc[0]
     

@@ -17,7 +17,7 @@ def strategies(trade_dataset,strats):
     # Baseline Case
     if (hold_as_baseline_case == 1):
         fund_evolution = [init_funds]
-        strat = account.account(['HOLD'],init_funds)
+        strat = account.trader(['HOLD'],init_funds)
         fund_evolution = numpy.zeros(ind_end-ind_start+1)
         fund_evolution[0] = init_funds
         investment = strat.invest(init_funds)
@@ -35,7 +35,7 @@ def strategies(trade_dataset,strats):
     #1 Day, Shorting Allowed
     if int(strats[0]) == 1:
         fund_evolution = [init_funds]
-        strat1 = account.account(['1 Day, Shorting Allowed'],init_funds)
+        strat1 = account.trader(['1 Day, Shorting Allowed'],init_funds)
         for i in range(ind_start,ind_end):
             if trade_dataset.y_pred[i] == 0:
                 investment = strat1.invest(increments)
@@ -57,7 +57,7 @@ def strategies(trade_dataset,strats):
     #1 Day, Shorting NOT Allowed
     if int(strats[1]) == 1:
         fund_evolution = [init_funds]
-        strat2 = account.account(['1 Day, Shorting NOT Allowed'],init_funds)
+        strat2 = account.trader(['1 Day, Shorting NOT Allowed'],init_funds)
         for j in range(ind_start,ind_end):
             if trade_dataset.y_pred[j] == 0:
                 investment = strat2.invest(0)

@@ -5,8 +5,10 @@ Spyder Editor
 This is a temporary script file.
 """
 import pandas as pd
+pd.options.mode.chained_assignment = None # Avoid SettingWithCopyWarning warnings
 
-def data_retriever(ticker):
+
+def retriever_stock(ticker):
     ind_date_correspondence = -1
     
     #Unit test:
@@ -79,7 +81,7 @@ def data_retriever(ticker):
     
     return df, df_index
 
-def ticker_list_retriever():
+def retriever_ticker_list():
     url = "https://www.netfonds.no/quotes/kurs.php?exchange=OSE&sec_types=&sectors=&ticks=&table=tab&sort=alphabetic"
     dataframe_complete = pd.read_csv(url, encoding = "ISO-8859-1", sep="\t")
     dataframe_tickers = dataframe_complete[['name','paper']]

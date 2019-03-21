@@ -6,39 +6,29 @@
 
 import numpy as np
 import random 
-from strategies import strategies
 from sklearn.preprocessing import StandardScaler
 from keras.models import Sequential
 from keras.layers import Dense
-from keras.layers import Dropout
-from data_retriever import data_retriever
-from data_extender import data_extender
-from timeseries_plotter import timeseries_plotter
-from account_plotter import account_plotter
 
-
-
-def predict(ticker, strats):
+def movement_prediction(df_ticker):
     random.seed(42)
     
     # Ask user for ticker input (case-sensitive)
     
-    df, df_index = data_retriever(ticker)
-    df = data_extender(df)
     
-    X = df.iloc[:, 3:-2]
-    y = df.iloc[:, -1] #-1
+    X = df_ticker.iloc[:, 3:-2]
+    y = df_ticker.iloc[:, -1] #-1
     
     #We then create two data frames storing the input and the output variables. The dataframe ‘X’ stores the input features, the columns starting from the fifth column (or index 4) of the dataset till the second last column. The last column will be stored in the dataframe y, which is the value we want to predict, i.e. the price rise.
     
-    split = int(len(df)*0.8)
+    split = int(len(df_ticker)*0.8)
     X_train, X_test, y_train, y_test = X[:split], X[split:], y[:split], y[split:]
     
     # Feature Scaling
     
-    succ = StandardScaler()
-    X_train = succ.fit_transform(X_train)
-    X_test = succ.transform(X_test)
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
     
     
     classifier = Sequential()
@@ -56,15 +46,10 @@ def predict(ticker, strats):
     y_pred = classifier.predict_classes(X_test)
     #y_pred = (y_pred > 0.5)
     
-    df['y_pred'] = np.NaN
-    df.iloc[(len(df) - len(y_pred)):,-1:] = y_pred
-    trade_dataset = df.dropna()
+    df_ticker['y_pred'] = np.NaN
+    df_ticker.iloc[(len(df_ticker) - len(y_pred)):,-1:] = y_pred
+    trade_dataset = df_ticker.dropna()
     
     classifier.summary()
     
-    
-    ## Evaluate the performance of the strategy
-    results = strategies(trade_dataset,strats)
-    timeseries_plotter(df)
-    account_plotter(results)
-    return 0;
+    return trade_dataset

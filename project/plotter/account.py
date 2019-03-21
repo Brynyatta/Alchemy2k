@@ -7,7 +7,7 @@ Created on Wed May 30 19:07:14 2018
 import plotly
 
 
-def account_plotter(results):
+def account(results):
     
     strategynames = results.Strategy[:]
     num_strategies = results.shape[0]

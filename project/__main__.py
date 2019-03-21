@@ -7,9 +7,14 @@ Created on Mon Jul 23 00:02:50 2018
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import pyqtSlot, QCoreApplication
-from predictor import predict
-from data_retriever import ticker_list_retriever
+import account
+import data
+import plotter
+import predict
+import strat
 import sys
+
+# Import homemade functions:
 
 strat1,strat2,strat3 = "1","1","1"
 
@@ -30,7 +35,7 @@ class Example(QWidget):
         self.strat3 = "1"
         
         # Retrieve the current list of tickers:
-        dataframe_tickers = ticker_list_retriever()
+        dataframe_tickers = data.retriever_ticker_list()
         self.ticker_list = dataframe_tickers.to_dict(orient='records')
         
         #TEKST
@@ -82,6 +87,8 @@ class Example(QWidget):
     def dropdown_selection(self,i):
         self.selected_ticker = self.ticker_list[i]['paper']
         self.ticker_been_selected = 1
+    
+    # Function runs if "Run Neural Network" button is pressed
     def btn_on_click(self):
         stratstring = self.strat1 + self.strat2 + self.strat3
         
@@ -89,7 +96,16 @@ class Example(QWidget):
         if(self.ticker_been_selected == 0):
             self.selected_ticker = self.ticker_list[0]['paper']
             
-        predict(self.selected_ticker,stratstring)
+            
+            df, df_index = data.retriever_stock(self.selected_ticker)
+            df_selected_ticker = data.extender(df)
+            
+            trade_dataset = predict.movement_prediction(df_selected_ticker)
+        
+            ## Evaluate the performance of the strategy
+            results = strat.strategies(trade_dataset,stratstring)
+            plotter.timeseries(df)
+            plotter.account(results)
     def state_changed(self,*args):
         for arg in args:
             if arg == 1:

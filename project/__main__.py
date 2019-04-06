@@ -106,6 +106,16 @@ class Example(QWidget):
             results = strat.strategies(trade_dataset,stratstring)
             plotter.timeseries(df)
             plotter.account(results)
+        else:             
+            df, df_index = data.retriever_stock(self.selected_ticker)
+            df_selected_ticker = data.extender(df)
+            
+            trade_dataset = predict.movement_prediction(df_selected_ticker)
+        
+            ## Evaluate the performance of the strategy
+            results = strat.strategies(trade_dataset,stratstring)
+            plotter.timeseries(df)
+            plotter.account(results)
     def state_changed(self,*args):
         for arg in args:
             if arg == 1:

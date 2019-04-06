@@ -15,15 +15,25 @@ def extender(df):
     #df['positive_movement'] = np.where(df['close'].shift(-1) > df['close'], 1, 0)
     df['Closing Difference'] = (df['close'].shift(-1)- df['close'])
     df['Std_dev_close_diff']= df['Closing Difference'].rolling(5).std()
-    df['Movement'] = "NaN"
-    # 1 = UP , 0 = SIDEWAYS , -1 = DOWN
+
+    df['Up'] = "NaN"
+    df['Sideways'] = "NaN"
+    df['Down'] = "NaN"
+
+
     for i in range(0,len(df)-1):
         if (abs(df['Closing Difference'].iloc[i]) > df['Std_dev_close_diff'].iloc[i]) and (df['Closing Difference'].iloc[i] > 0):
-            df.set_value(i, 'Movement', 1)
+            df.set_value(i, 'Up', 1)
+            df.set_value(i, 'Sideways', 0)
+            df.set_value(i, 'Down', 0)
         elif (abs(df['Closing Difference'].iloc[i]) > df['Std_dev_close_diff'].iloc[i])  and (df['Closing Difference'].iloc[i] < 0):
-            df.set_value(i, 'Movement', -1)
+            df.set_value(i, 'Up', 0)
+            df.set_value(i, 'Sideways', 0)
+            df.set_value(i, 'Down', 1)
         else: 
-            df.set_value(i, 'Movement', 0)
+            df.set_value(i, 'Up', 0)
+            df.set_value(i, 'Sideways', 1)
+            df.set_value(i, 'Down', 0)
+    
     df = df.dropna()
-
     return df;

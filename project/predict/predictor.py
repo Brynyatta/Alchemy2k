@@ -9,6 +9,7 @@ import random
 from sklearn.preprocessing import StandardScaler
 from keras.models import Sequential
 from keras.layers import Dense
+from keras.utils import np_utils
 
 def movement_prediction(df_ticker):
     random.seed(42)
@@ -16,8 +17,8 @@ def movement_prediction(df_ticker):
     # Ask user for ticker input (case-sensitive)
     
     
-    X = df_ticker.iloc[:, 3:-2]
-    y = df_ticker.iloc[:, -1] #-1
+    X = df_ticker.iloc[:, 3:-5] #X = df_ticker.iloc[:, 3:-5] to exclude closing dif & std. closing dif
+    y = df_ticker.iloc[:, -3:] 
     
     #We then create two data frames storing the input and the output variables. The dataframe ‘X’ stores the input features, the columns starting from the fifth column (or index 4) of the dataset till the second last column. The last column will be stored in the dataframe y, which is the value we want to predict, i.e. the price rise.
     
@@ -31,25 +32,30 @@ def movement_prediction(df_ticker):
     X_test = scaler.transform(X_test)
     
     
-    classifier = Sequential()
+    model = Sequential()
     
     # 2
     
-    model = Sequential()
-    classifier.add(Dense(units = 128, kernel_initializer = 'uniform', activation = 'relu', input_dim = X.shape[1]))
-    classifier.add(Dense(units = 128, kernel_initializer = 'uniform', activation = 'relu'))
-    classifier.add(Dense(units = 128, kernel_initializer = 'uniform', activation = 'relu'))
-    classifier.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'sigmoid'))
-    classifier.compile(optimizer = 'adam', loss = 'mean_squared_error', metrics = ['accuracy'])
-    classifier.fit(X_train, y_train, batch_size = 32, epochs = 100)
+    model.add(Dense(units = 128, kernel_initializer = 'uniform', activation = 'relu', input_dim = X.shape[1]))
+    model.add(Dense(units = 128, kernel_initializer = 'uniform', activation = 'relu'))
+    model.add(Dense(units = 128, kernel_initializer = 'uniform', activation = 'relu'))
+    model.add(Dense(units = 128, kernel_initializer = 'uniform', activation = 'relu'))
+    model.add(Dense(units = 128, kernel_initializer = 'uniform', activation = 'relu'))
+    model.add(Dense(3, activation = 'softmax'))
     
-    y_pred = classifier.predict_classes(X_test)
-    #y_pred = (y_pred > 0.5)
+    model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
+    model.fit(X_train, y_train, batch_size = 32, epochs = 200)
     
-    df_ticker['y_pred'] = np.NaN
-    df_ticker.iloc[(len(df_ticker) - len(y_pred)):,-1:] = y_pred
+    y_pred = model.predict_classes(X_test)
+    
+    df_ticker['pred_up'] = np.NaN
+    df_ticker['pred_sideways'] = np.NaN
+    df_ticker['pred_down'] = np.NaN
+
+    y_pred_OneHot = np_utils.to_categorical(y_pred)
+    df_ticker.iloc[(len(df_ticker) - len(y_pred)):,-3:] = y_pred_OneHot
     trade_dataset = df_ticker.dropna()
     
-    classifier.summary()
+    model.summary()
     
     return trade_dataset

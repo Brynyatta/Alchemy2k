@@ -37,13 +37,16 @@ def strategies(trade_dataset,strats):
         fund_evolution = [init_funds]
         strat1 = account.trader(['1 Day, Shorting Allowed'],init_funds)
         for i in range(ind_start,ind_end):
-            if trade_dataset.y_pred[i] == 0:
+            if trade_dataset.Down[i] == 1:
                 investment = strat1.invest(increments)
                 shares_bought = (investment/trade_dataset.close[i])
                 profit = (trade_dataset.close[i]-trade_dataset.close[i+1])*shares_bought
                 strat1.profit(profit+investment)
                 fund_evolution.append(strat1.balance)
-            elif trade_dataset.y_pred[i] == 1:
+            elif trade_dataset.Sideways[i] == 1:
+                investment = strat1.invest(0)
+                fund_evolution.append(strat1.balance)
+            elif trade_dataset.Up[i] == 1:
                 investment = strat1.invest(increments)
                 shares_bought = (investment/trade_dataset.close[i])
                 profit = (trade_dataset.close[i+1]-trade_dataset.close[i])*shares_bought
@@ -59,10 +62,13 @@ def strategies(trade_dataset,strats):
         fund_evolution = [init_funds]
         strat2 = account.trader(['1 Day, Shorting NOT Allowed'],init_funds)
         for j in range(ind_start,ind_end):
-            if trade_dataset.y_pred[j] == 0:
+            if trade_dataset.Sideways[j] == 1:
                 investment = strat2.invest(0)
                 fund_evolution.append(strat2.balance)
-            elif trade_dataset.y_pred[j] == 1:
+            elif trade_dataset.Down[j] ==1 :
+                investment = strat2.invest(0)
+                fund_evolution.append(strat2.balance)
+            elif trade_dataset.Up[j] == 1:
                 investment = strat2.invest(increments)
                 shares_bought = (investment/trade_dataset.close[j])
                 profit = (trade_dataset.close[j+1]-trade_dataset.close[j])*shares_bought

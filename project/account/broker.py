@@ -4,9 +4,12 @@ class trader(object):
         self.name = name
         self.balance = balance
 
+    # Invest command, either returns amount of funds invested upon success, or
+    # zero if the command failed.
+    
     def invest(self,investment):
         if investment > self.balance:
-            print("Insuff'icient funds!")
+            print("Insufficient funds!")
             return 0;
         else:
             self.balance -= investment
@@ -15,20 +18,3 @@ class trader(object):
     
     def profit(self,profitvalue):
         self.balance += profitvalue
-        
-def investment_manager(change,shorted):
-    
-    # Input variables
-    initial_investment = 10000
-    shorting_allowed = True
-    
-    if investment_manager.counter == 0:
-        investment_manager.investment = initial_investment
-    investment_manager.counter += 1
-    
-    
-    if shorted == 1 and shorting_allowed == False:
-        return investment_manager.investment;
-    else:
-        investment_manager.investment += change
-        return (investment_manager.investment);s

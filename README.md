@@ -4,10 +4,18 @@ A very crude version of a trading aid that predicts stock movement, and lets you
 
 _________________
 LIBRARIES NEEDED:
-talib, PyQt5, pandas, keras, numpy, sklearn, plotly
-
-
-
+PyQt5, pandas, keras, tensorflow, numpy, sklearn, plotly...
+and TA-lib, which is a bitch to find online, and thus included in the dependencies :)
+```
+pip install Dependencies/TA_Lib-0.4.17-cp37-cp37m-win_amd64.whl
+pip install plotly
+pip install keras
+pip install tensorflow
+pip install sklearn
+pip install pandas
+pip install numpy
+pip install PyQt5
+```
 _________________________________
 Composed of the following packages & modules:
 

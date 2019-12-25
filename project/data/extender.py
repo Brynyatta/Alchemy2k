@@ -4,16 +4,17 @@ import talib
 
 
 def extender(df):
-    df['H-L'] = df['high'] - df['low']
-    df['O-C'] = df['close'] - df['open']
-    df['3day MA'] = df['close'].shift(1).rolling(window = 3).mean()
-    df['10day MA'] = df['close'].shift(1).rolling(window = 10).mean()
-    df['30day MA'] = df['close'].shift(1).rolling(window = 30).mean()
-    df['Std_dev_closing']= df['close'].rolling(5).std()
-    df['RSI'] = talib.RSI(df['close'].values, timeperiod = 9)
-    df['Williams %R'] = talib.WILLR(df['high'].values, df['low'].values, df['close'].values, 7)
+    df['Non_pubic_trades'] =  df['TRADES_COUNT_TOTAL'] - df['TRADES_COUNT']
+    df['H-L'] = df['HIGH'] - df['LOW']
+    df['O-C'] = df['CLOSE'] - df['OPEN']
+    df['3day MA'] = df['CLOSE'].shift(1).rolling(window = 3).mean()
+    df['10day MA'] = df['CLOSE'].shift(1).rolling(window = 10).mean()
+    df['30day MA'] = df['CLOSE'].shift(1).rolling(window = 30).mean()
+    df['Std_dev_closing']= df['CLOSE'].rolling(5).std()
+    df['RSI'] = talib.RSI(df['CLOSE'].values, timeperiod = 9)
+    df['Williams %R'] = talib.WILLR(df['HIGH'].values, df['LOW'].values, df['CLOSE'].values, 7)
     #df['positive_movement'] = np.where(df['close'].shift(-1) > df['close'], 1, 0)
-    df['Closing Difference'] = (df['close'].shift(-1)- df['close'])
+    df['Closing Difference'] = (df['CLOSE'].shift(-1)- df['CLOSE'])
     df['Std_dev_close_diff']= df['Closing Difference'].rolling(5).std()
 
     df['Up'] = "NaN"
@@ -36,4 +37,3 @@ def extender(df):
             df.set_value(i, 'Down', 0)
     
     df = df.dropna()
-    return df;

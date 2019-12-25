@@ -21,14 +21,14 @@ def strategies(trade_dataset,strats):
         fund_evolution = numpy.zeros(ind_end-ind_start+1)
         fund_evolution[0] = init_funds
         investment = strat.invest(init_funds)
-        shares_bought = (investment/trade_dataset.close[ind_start])
+        shares_bought = (investment/trade_dataset.CLOSE[ind_start])
         
-        profit = (trade_dataset.close[ind_end]-trade_dataset.close[ind_start])*shares_bought
+        profit = (trade_dataset.CLOSE[ind_end]-trade_dataset.CLOSE[ind_start])*shares_bought
         fund_evolution[-1] = (profit+investment)
         spacing = (fund_evolution[-1] - fund_evolution[0])/(ind_end-ind_start)
         for j in range(1,ind_end-ind_start):
             fund_evolution[j] = init_funds + j*spacing
-        stratDF1 = pd.DataFrame({"quote_date": trade_dataset.quote_date, "Balance": fund_evolution})
+        stratDF1 = pd.DataFrame({"quote_date": trade_dataset.Date, "Balance": fund_evolution})
         results = pd.DataFrame({"Data": [[stratDF1]],"Strategy": ["Buy & Hold"]})
 
     # STRATEGY 1 
@@ -39,8 +39,8 @@ def strategies(trade_dataset,strats):
         for i in range(ind_start,ind_end):
             if trade_dataset.Down[i] == 1:
                 investment = strat1.invest(increments)
-                shares_bought = (investment/trade_dataset.close[i])
-                profit = (trade_dataset.close[i]-trade_dataset.close[i+1])*shares_bought
+                shares_bought = (investment/trade_dataset.CLOSE[i])
+                profit = (trade_dataset.CLOSE[i]-trade_dataset.CLOSE[i+1])*shares_bought
                 strat1.profit(profit+investment)
                 fund_evolution.append(strat1.balance)
             elif trade_dataset.Sideways[i] == 1:
@@ -48,11 +48,11 @@ def strategies(trade_dataset,strats):
                 fund_evolution.append(strat1.balance)
             elif trade_dataset.Up[i] == 1:
                 investment = strat1.invest(increments)
-                shares_bought = (investment/trade_dataset.close[i])
-                profit = (trade_dataset.close[i+1]-trade_dataset.close[i])*shares_bought
+                shares_bought = (investment/trade_dataset.CLOSE[i])
+                profit = (trade_dataset.CLOSE[i+1]-trade_dataset.CLOSE[i])*shares_bought
                 strat1.profit(profit+investment)
                 fund_evolution.append(strat1.balance)
-        stratDF2 = pd.DataFrame({"quote_date": trade_dataset.quote_date, "Balance": fund_evolution})
+        stratDF2 = pd.DataFrame({"quote_date": trade_dataset.Date, "Balance": fund_evolution})
         data2 = pd.DataFrame({"Data": [[stratDF2]],"Strategy": ["1 Day, Shorting Allowed"]})
         results = results.append(data2, ignore_index=True)
 
@@ -70,11 +70,11 @@ def strategies(trade_dataset,strats):
                 fund_evolution.append(strat2.balance)
             elif trade_dataset.Up[j] == 1:
                 investment = strat2.invest(increments)
-                shares_bought = (investment/trade_dataset.close[j])
-                profit = (trade_dataset.close[j+1]-trade_dataset.close[j])*shares_bought
+                shares_bought = (investment/trade_dataset.CLOSE[j])
+                profit = (trade_dataset.CLOSE[j+1]-trade_dataset.CLOSE[j])*shares_bought
                 strat2.profit(profit+investment)
                 fund_evolution.append(strat2.balance)
-        stratDF3 = pd.DataFrame({"quote_date": trade_dataset.quote_date, "Balance": fund_evolution})
+        stratDF3 = pd.DataFrame({"quote_date": trade_dataset.Date, "Balance": fund_evolution})
         data3 = pd.DataFrame({"Data": [[stratDF3]],"Strategy": ["1 Day, Shorting NOT Allowed"]})
         results = results.append(data3, ignore_index=True)
         

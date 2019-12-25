@@ -7,27 +7,25 @@ Created on Wed May 30 19:07:14 2018
 import plotly
 
 
-def timeseries(df):
-    
-    ticker = df.paper.iloc[0]
+def timeseries(df, ticker):
     
     trace_high = plotly.graph_objs.Scatter(
-        x=df.quote_date,
-        y=df['high'],
+        x=df.Date,
+        y=df['HIGH'],
         name = ticker + " High",
         line = dict(color = '#17BECF'),
         opacity = 0.3)
     
     close = plotly.graph_objs.Scatter(
-        x=df.quote_date,
-        y=df['close'],
+        x=df.Date,
+        y=df['CLOSE'],
         name = ticker + " Closing",
         line = dict(color = '#3300ff'),
         opacity = 0.8)
     
     trace_low = plotly.graph_objs.Scatter(
-        x=df.quote_date,
-        y=df['low'],
+        x=df.Date,
+        y=df['LOW'],
         name = ticker + " Low",
         line = dict(color = '#ff1c63'),
         opacity = 0.3)

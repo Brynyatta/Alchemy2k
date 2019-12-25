@@ -36,4 +36,4 @@ def extender(df):
             df.set_value(i, 'Sideways', 1)
             df.set_value(i, 'Down', 0)
     
-    df = df.dropna()
+    df.dropna(inplace = True)

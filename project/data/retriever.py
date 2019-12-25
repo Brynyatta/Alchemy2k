@@ -9,7 +9,8 @@ pd.options.mode.chained_assignment = None # Avoid SettingWithCopyWarning warning
 from requests import request
 import datetime
 
-PARAMETER_ROSTER = "CLOSE,OPEN,HIGH,LOW,ASK,BID,TURNOVER_TOTAL,TRADES_COUNT,TRADES_COUNT_TOTAL,VWAP"
+nans_found = 0
+PARAMETER_ROSTER = "CLOSE,OPEN,HIGH,LOW,ASK,BID,TURNOVER_TOTAL,TRADES_COUNT,TRADES_COUNT_TOTAL"
 
 def retriever_stock(ticker, parameters = PARAMETER_ROSTER, years_of_data = 30):
     ind_date_correspondence = -1
@@ -27,9 +28,9 @@ def retriever_stock(ticker, parameters = PARAMETER_ROSTER, years_of_data = 30):
     start_of_array = first_full_datapoint(array_chosen_stock, parameters)
     print("The data from " + ticker + " had all variables intact first at index " + str(start_of_array['index']) + " where the following variable(s) became available: ")
     print(*start_of_array['parameters'])
-    df_stock = pd.DataFrame(data=array_chosen_stock, columns=['Date'] + parameters.split(','));
+    df_stock = pd.DataFrame(data=array_chosen_stock[start_of_array['index']:], columns=['Date'] + parameters.split(','));
     POSIX_to_ISO_datetime(df_stock)
-    
+    data_patcher(df_stock)
     
     url_index = 'https://www.oslobors.no/ob/servlets/components/graphdata/(CLOSE)/DAY/OSEBX.OSE?points=9999&stop=2019-12-23&period=30years'
     response=request(url=url_index, method='get')
@@ -37,7 +38,8 @@ def retriever_stock(ticker, parameters = PARAMETER_ROSTER, years_of_data = 30):
     array_index = content_index['rows'][0]['values']['series']['c1']['data']
     df_index = pd.DataFrame(data=array_index, columns=['Date','CLOSE']);
     POSIX_to_ISO_datetime(df_index)
-
+    data_patcher(df_index)
+    
     
     
     for i in range(0,len(df_index.Date)):
@@ -97,6 +99,19 @@ def POSIX_to_ISO_datetime(df):
     for i in range(0, len(df)):
         POSIX_timestamp = str(df['Date'][i])
         df['Date'][i] = datetime.datetime.fromtimestamp(int(POSIX_timestamp[0:-3])).strftime('%Y-%m-%d')
+
+# Replace NaNs by the previous value and notify user
+def data_patcher(df):
+    global nans_found 
+    indexes_containing_nan = pd.isnull(df).any(1).nonzero()[0]
+    for i in range(0,len(indexes_containing_nan)):
+        for j in range (0, len(df.columns)):
+            if (pd.isnull(df.iloc[indexes_containing_nan[i]][j])):
+                nans_found = nans_found + 1
+                df.iat[indexes_containing_nan[i],j] = df.iloc[indexes_containing_nan[i]-1,j]
+                print("Warning: the " + str(nans_found) + "th NaN has been found and patched in index " + str(indexes_containing_nan[i]) + " and column: " +  df.columns[j])
+                
+        
 
 # Returns the first datapoint in the array that is full, i.e. contains valid data
 def first_full_datapoint(array, parameters):

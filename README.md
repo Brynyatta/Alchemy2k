@@ -19,7 +19,11 @@ pip install PyQt5
 _________________________________
 Composed of the following packages & modules:
 
-__main__.py - You want to run this file first, which handles the graphical user interface. 
+__main__.py - You want to run this file first, which contains the backend logic before and after GUI instructions. 
+
+gui package:
+_____________
+gui_constructor: The QtPy implmentation which handles the graphical user interface. 
 
 data package: 
 _____________
@@ -44,3 +48,6 @@ _______________
 account.py - Plotly tool for showing the evolution of the hypothetical broker account 
 
 timeseries.py - Plotly tool for showing the evolution of the underlying stock price 
+
+
+cumulativereturns.py - Plotly tool for cumulative returns for different strategies and the stock itself

@@ -82,7 +82,7 @@ class Example(QWidget):
         # Vinduet i seg sjølv
         self.setGeometry(300, 300, 300, 200)
         self.setWindowTitle("Alchemy2k")
-        self.resize(600,500)
+        self.resize(600,300)
         self.show()
     def dropdown_selection(self,i):
         self.selected_ticker = self.ticker_list[i]['paper']

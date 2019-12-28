@@ -34,19 +34,19 @@ def movement_prediction(df_ticker):
     model = Sequential()
     model.add(Dense(units = 128, kernel_initializer = 'uniform', activation = 'relu', input_dim = X.shape[1]))
     model.add(Dense(units = 128, kernel_initializer = 'uniform', activation = 'relu'))
-    model.add(Dense(units = 128, kernel_initializer = 'uniform', activation = 'relu'))
-    model.add(Dense(units = 128, kernel_initializer = 'uniform', activation = 'relu'))
+    model.add(Dense(units = 256, kernel_initializer = 'uniform', activation = 'relu'))
+    model.add(Dense(units = 256, kernel_initializer = 'uniform', activation = 'relu'))
     model.add(Dense(units = 128, kernel_initializer = 'uniform', activation = 'relu'))
     model.add(Dense(3, activation = 'softmax'))
     
     model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
-    model.fit(X_train, y_train, batch_size = 32, epochs = 200)
+    model.fit(X_train, y_train, batch_size = 32, epochs = 350)
     
     y_pred = model.predict_classes(X_test)
     
-    df_ticker['pred_up'] = np.NaN
-    df_ticker['pred_sideways'] = np.NaN
-    df_ticker['pred_down'] = np.NaN
+    df_ticker['Pred_Up'] = np.NaN
+    df_ticker['Pred_Sideways'] = np.NaN
+    df_ticker['Pred_Down'] = np.NaN
 
     y_pred_OneHot = np_utils.to_categorical(y_pred, num_classes = 3)
     df_ticker.iloc[(len(df_ticker) - len(y_pred)):,-3:] = y_pred_OneHot

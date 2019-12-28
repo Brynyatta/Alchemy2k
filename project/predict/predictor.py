@@ -11,7 +11,7 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras.utils import np_utils
 
-def movement_prediction(df_ticker):
+def movement_prediction(df_ticker, parameters):
     random.seed(42)
     
     
@@ -40,7 +40,7 @@ def movement_prediction(df_ticker):
     model.add(Dense(3, activation = 'softmax'))
     
     model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
-    model.fit(X_train, y_train, batch_size = 32, epochs = 350)
+    model.fit(X_train, y_train, batch_size = parameters['batch_size'], epochs = parameters['epochs'])
     
     y_pred = model.predict_classes(X_test)
     

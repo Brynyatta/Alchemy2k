@@ -7,7 +7,7 @@ Created on Wed May 30 19:07:14 2018
 import plotly
 
 
-def account(results):
+def account(results, ticker):
     
     strategynames = results.Strategy[:]
     num_strategies = results.shape[0]
@@ -39,7 +39,11 @@ def account(results):
         data.append(funds3)
     
     layout = dict(
-        title='Evolution of different strategies',
+        title={"text":'Evolution of different strategies for ' + ticker,
+        'y':0.995,
+        'x':0.5,
+        'xanchor': 'center',
+        'yanchor': 'top'},               
         xaxis=dict(
             rangeselector=dict(
                 buttons=list([

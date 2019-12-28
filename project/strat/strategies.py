@@ -6,8 +6,8 @@ import account
 def strategies(trade_dataset,strats):
     
     ## Settings
-    init_funds = 10000
-    increments = 2000
+    init_funds = 300000
+    increments = 300000
     hold_as_baseline_case = 1 # Whether to show holding the stocks from start data until now
     ind_start = trade_dataset.index[0]
     ind_end = trade_dataset.index[-1]
@@ -80,6 +80,6 @@ def strategies(trade_dataset,strats):
         
     # STRATEGY 3
     # if int(strats[2]) == 1:
-        
+    
     return results;
 

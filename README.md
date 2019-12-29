@@ -23,17 +23,17 @@ __main__.py - You want to run this file first, which contains the backend logic 
 _____________
 gui package:
 _____________
-gui_constructor: The QtPy implmentation which handles the graphical user interface. 
+gui_constructor: The QtPy implementation which handles the graphical user interface. 
 _____________
 data package: 
 _____________
-retriever.py - Downloads ticker list and financial data for the selected stock, from Netfonds. Scrubs the data and ensures that the datapoints of the    stock and the index of the exchange have common dates. 
+retriever.py - Downloads ticker list and financial data for the selected stock, from Oslo Børs. Scrubs the data and ensures that the datapoints of the stock and the index of the exchange have common dates. 
 
 extender.py - Derives useful financial metrics from the raw data extracted by data_retriever using the 'talib' Python library. Produces values for RSI, standard deviation, Williams %R and so forth.  
 _____________
 predict package: 
 __________
-predictor.py - 3-layer neural network that predicts the next day movement of the stock. Prediction output for stock movement is either -1 (downwards), 0 (sideways) or 1 (upwards). 
+predictor.py - 3-layer neural network that predicts the next day movement of the stock. Prediction output for stock movement for the next day is One-Hot Encoded to three columns: Upwards, Sideways and Downwards. 
 _____________
 account package:
 ________________
